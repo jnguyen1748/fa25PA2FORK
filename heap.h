@@ -17,6 +17,8 @@ struct MinHeap {
     void push(int idx, int weightArr[]) {
         // TODO: insert index at end of heap, restore order using upheap()
         // (note that data is our minheap)
+        if (size >= 64) return; // full
+
         data[size] = idx; // Insert the given index at the end of the heap array (data[size])
         // Increment the heap size
         size++;
@@ -30,7 +32,10 @@ struct MinHeap {
         int index = data[0]; //root value
         data[0] = data[size - 1]; // get the element at the bottom of the heap and replace root with it
         size--; // get rid of last element by shrinking heap
-        downheap(0, weightArr); //restore minheap, start at root b/c just replaced it
+        if (size > 0) { //dont want to downheap at 0 size or we downheap nothing
+            downheap(0, weightArr);
+        } //restore minheap, start at root b/c just replaced it
+
         // Replace root with last element, then call downheap()
         return index;
     }
@@ -57,10 +62,11 @@ struct MinHeap {
         int right = 2 * pos + 2;
         int min = pos; // start smallest at our position index
 
-        if (weightArr[data[left]] < weightArr[data[min]]) {
+        // left < size and right < size ensure our child nodes exists
+        if (left < size && weightArr[data[left]] < weightArr[data[min]]) {
             min = left;
         }
-        if (weightArr[data[right]] < weightArr[data[min]]) {
+        if (right < size && weightArr[data[right]] < weightArr[data[min]]) {
             min = right;
         }
 
