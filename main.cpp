@@ -25,6 +25,7 @@ void encodeMessage(const string& filename, string codes[]);
 int main() {
     int freq[26] = {0};
 
+    //IN ORDER TO CHANGE INPUT CHANGE THE INPUT FILE IN CMAKE-BUILD-DEBUG
     // Step 1: Read file and count letter frequencies
     buildFrequencyTable(freq, "input.txt");
 
