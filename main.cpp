@@ -91,21 +91,85 @@ int createLeafNodes(int freq[]) {
 int buildEncodingTree(int nextFree) {
     // TODO:
     // 1. Create a MinHeap object.
+    MinHeap min_heap;
+
+
+    if (nextFree <= 0) { //no characters to actually encode
+        return 0;
+    }
     // 2. Push all leaf node indices into the heap.
+    for (int i = 0; i < nextFree; ++i) {
+        min_heap.push(i, weightArr);
+    }
     // 3. While the heap size is greater than 1:
     //    - Pop two smallest nodes
     //    - Create a new parent node with combined weight
     //    - Set left/right pointers
     //    - Push new parent index back into the heap
+
+    while (min_heap.size > 1) {
+        int left = min_heap.pop(weightArr);   // 1st smallest node pop
+        int right = min_heap.pop(weightArr);  // second smallest node pop
+
+        // Create a new parent node
+        int parent = nextFree++;
+        //combine the weight and place in parent
+        weightArr[parent] = weightArr[left] + weightArr[right];
+
+        //set left and right pointers
+        leftArr[parent] = left;
+        rightArr[parent] = right;
+        charArr[parent] = '*'; // mark node as the parent
+
+        // Push parent node back into the heap
+        min_heap.push(parent, weightArr);
+    }
+
     // 4. Return the index of the last remaining node (root)
-    return -1; // placeholder
+    int root = min_heap.pop(weightArr);
+    return root;
 }
 
 // Step 4: Use an STL stack to generate codes
 void generateCodes(int root, string codes[]) {
     // TODO:
     // Use stack<pair<int, string>> to simulate DFS traversal.
+
+    if (root == -1) {
+        return; //no tree
+    }
+    //initialize stack
+    stack<pair<int, string>> stack;
+    stack.push({root, ""}); //first element so stack does not start empty and we trigger while
+
+    while (!stack.empty()) {
+
+    pair<int, string> topPair = stack.top();
+    //int node = topPair.first; // this is the index of the node
+    //string code = topPair.second; // this is a code representing how to get there
+
+        //does above code but using c++ built in auto
+        auto [node, code] = stack.top();
+        stack.pop();
+
+
     // Left edge adds '0', right edge adds '1'.
+
+    if (leftArr[node] == -1 && rightArr[node] == -1) { //this means it's a leaf node (no children)
+        // Record code for this character
+        codes[charArr[node] - 'a'] = code; // inside codes is an index
+    }
+
+    else {
+        // an internal node (has children of L or R)
+        if (rightArr[node] != -1) {
+            stack.push({rightArr[node], code + "1"});
+        }
+        if (leftArr[node] != -1) {
+            stack.push({leftArr[node], code + "0"});
+        }
+    }
+    }
     // Record code when a leaf node is reached.
 }
 
