@@ -42,38 +42,67 @@ struct MinHeap {
 
     void upheap(int pos, int weightArr[]) {
         // TODO: swap child upward while smaller than parent
-        int parent = (pos - 1) / 2;
         if (pos == 0) {
             return; //cannot access negative index
         }
-        if (weightArr[data[pos]] < weightArr[data[parent]]) { // this means our element is
-            //smaller than parent
-            // before swap: parent <-- above pos
-            swap(data[pos], data[parent]);
-            // now: pos <-- above parent
+        //recursive implementation
+        //  int parent = (pos - 1) / 2;
+        // if (weightArr[data[pos]] < weightArr[data[parent]]) { // this means our element is
+        //     //smaller than parent
+        //     // before swap: parent <-- above pos
+        //     swap(data[pos], data[parent]);
+        //     // now: pos <-- above parent
+        //     upheap(parent, weightArr); //keep moving up if not at top yet
+        // }
 
-            upheap(parent, weightArr); //keep moving up if not at top yet
+        while (pos > 0) {
+            int parent = (pos - 1) / 2;
+            //smaller than parent
+            if (weightArr[data[pos]] < weightArr[data[parent]]) {
+                swap(data[pos], data[parent]);
+                pos = parent;
+            }
+            else {
+                return; // break loop
+            }
         }
     }
 
     void downheap(int pos, int weightArr[]) {
         // TODO: swap parent downward while larger than any child
-        int left = 2 * pos + 1;
-        int right = 2 * pos + 2;
-        int min = pos; // start smallest at our position index
-
-        // left < size and right < size ensure our child nodes exists
-        if (left < size && weightArr[data[left]] < weightArr[data[min]]) {
-            min = left;
-        }
-        if (right < size && weightArr[data[right]] < weightArr[data[min]]) {
-            min = right;
-        }
-
-        // this means we did not move min or we are in the right spot
-        if (min != pos) {
-            swap(data[pos], data[min]);
-            downheap(min, weightArr);
+        // int left = 2 * pos + 1;
+        // int right = 2 * pos + 2;
+        // int min = pos; // start smallest at our position index
+        // // left < size and right < size ensure our child nodes exists
+        // if (left < size && weightArr[data[left]] < weightArr[data[min]]) {
+        //     min = left;
+        // }
+        // if (right < size && weightArr[data[right]] < weightArr[data[min]]) {
+        //     min = right;
+        // }
+        // // this means we did not move min or we are in the right spot
+        // if (min != pos) {
+        //     swap(data[pos], data[min]);
+        //     downheap(min, weightArr);
+        // }
+        while (true) {
+            // same format as recursive
+            int left = 2 * pos + 1;
+            int right = 2 * pos + 2;
+            int min = pos;
+            if (left < size && weightArr[data[left]] < weightArr[data[min]]) {
+                min = left;
+            }
+            if (right < size && weightArr[data[right]] < weightArr[data[min]]) {
+                min = right;
+            }
+            if (min != pos) {
+                swap(data[min], data[pos]);
+                pos = min; // just need this so we actually move down tree for more operations
+            }
+            else {
+                return; // exit
+            }
         }
     }
 };

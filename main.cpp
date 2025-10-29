@@ -100,8 +100,7 @@ int buildEncodingTree(int nextFree) {
     // TODO:
     // 1. Create a MinHeap object.
     MinHeap min_heap;
-
-
+    min_heap.size = 0; // set size to zero (keep less variables unknown)
     if (nextFree <= 0) { //no characters to actually encode
         return 0;
     }
@@ -158,7 +157,7 @@ void generateCodes(int root, string codes[]) {
 
         //does above code but using c++ built in auto
         auto [node, code] = stack.top();
-        stack.pop()
+        stack.pop();
 
     // Left edge adds '0', right edge adds '1'.
 
