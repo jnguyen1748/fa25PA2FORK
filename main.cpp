@@ -27,15 +27,21 @@ int main() {
 
     //IN ORDER TO CHANGE INPUT CHANGE THE INPUT FILE IN CMAKE-BUILD-DEBUG
     // Step 1: Read file and count letter frequencies
+    //GOAL:COUNT FREQUENCY OF CHARACTERS FOR WEIGHT
     buildFrequencyTable(freq, "input.txt");
 
     // Step 2: Create leaf nodes for each character with nonzero frequency
+    // GOAL: TURN EACH CHARACTER INTO A NODE AND ASSIGN WEIGHT AS FREQUENCY
     int nextFree = createLeafNodes(freq);
 
     // Step 3: Build encoding tree using your heap
+    // goal: build a tree for encoding, in which the low frequency characters are deeper and high frequency characters
+    //further up
     int root = buildEncodingTree(nextFree);
 
     // Step 4: Generate binary codes using an STL stack
+    //GOAL: assign binary codes to each character
+    // basically translate tree structure into a binary code for each letter
     string codes[26];
     generateCodes(root, codes);
 
@@ -73,6 +79,7 @@ void buildFrequencyTable(int freq[], const string& filename) {
 }
 
 // Step 2: Create leaf nodes for each character
+// GOAL: TURN EACH CHARACTER INTO A NODE AND ASSIGN WEIGHT AS FREQUENCY
 int createLeafNodes(int freq[]) {
     int nextFree = 0;
     for (int i = 0; i < 26; ++i) {
@@ -151,8 +158,7 @@ void generateCodes(int root, string codes[]) {
 
         //does above code but using c++ built in auto
         auto [node, code] = stack.top();
-        stack.pop();
-
+        stack.pop()
 
     // Left edge adds '0', right edge adds '1'.
 
